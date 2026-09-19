@@ -1,0 +1,30 @@
+const db = require('../config/db');
+
+exports.getArticles = async (req, res) => {
+  try {
+    const { region } = req.query;
+    let query = 'SELECT * FROM articles';
+    let params = [];
+
+    if (region) {
+      query += ' WHERE region_tag = $1';
+      params.push(region);
+    }
+
+    query += ' ORDER BY published_at DESC';
+
+    const { rows } = await db.query(query, params);
+    res.status(200).json({ success: true, count: rows.length, data: rows });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Server Error fetching articles' });
+  }
+};
+
+exports.getCreators = async (req, res) => {
+  try {
+    const { rows } = await db.query('SELECT * FROM creators ORDER BY is_featured DESC, name ASC');
+    res.status(200).json({ success: true, count: rows.length, data: rows });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Server Error fetching creators' });
+  }
+};
