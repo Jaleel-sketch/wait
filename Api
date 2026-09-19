@@ -1,0 +1,8 @@
+const express = require('express');
+const router = express.Router();
+const { getArticles, getCreators } = require('../controllers/contentController');
+
+router.get('/articles', getArticles);
+router.get('/creators', getCreators);
+
+module.exports = router;
