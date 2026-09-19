@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architectural Praxis | Design, Policy & Education</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f4f7f6',
+                            100: '#e3eae7',
+                            500: '#2c5e55',
+                            600: '#234b44',
+                            700: '#1b3a35',
+                            900: '#0f221f',
+                        },
+                        accent: {
+                            gold: '#d4af37',
+                            terracotta: '#e07a5f'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Custom smooth scrolling and scrollbar styles */
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #8883; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8886; }
+    </style>
+</head>
+<body class="bg-stone-50 dark:bg-stone-900 text-stone-800 dark:text-stone-100 font-sans transition-colors duration-300 min-h-full flex flex-col">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-stone-50/80 dark:bg-stone-900/80 border-b border-stone-200 dark:border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-compass-drafting text-2xl text-brand-500 dark:text-brand-100"></i>
+                <span class="text-xl font-bold tracking-tight font-serif">ARCHITECTURAL PRAXIS</span>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="#news" class="hover:text-brand-500 transition-colors">Articles</a>
+                <a href="#creators" class="hover:text-brand-500 transition-colors">Creators</a>
+                <a href="#policies" class="hover:text-brand-500 transition-colors">Policies</a>
+                <a href="#academy" class="hover:text-brand-500 transition-colors">Academy</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <!-- Dark Mode Toggle -->
+                <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2 rounded-lg bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 dark:hover:bg-stone-700 transition-colors" title="Toggle theme">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+                
+                <!-- Bookmark Drawer Trigger -->
+                <button onclick="toggleBookmarkDrawer()" class="relative p-2 rounded-lg bg-brand-500 text-white hover:bg-brand-600 transition-colors flex items-center gap-2 text-sm font-medium">
+                    <i class="fa-solid fa-bookmark"></i>
+                    <span class="hidden sm:inline">Saved</span>
+                    <span id="savedCountBadge" class="bg-accent-terracotta text-white text-xs px-1.5 py-0.5 rounded-full font-bold">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="relative bg-brand-900 text-stone-100 py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div class="max-w-5xl mx-auto text-center space-y-6 relative z-10">
+            <span class="inline-block px-3 py-1 bg-brand-700 text-accent-gold rounded-full text-xs font-semibold tracking-wider uppercase">Open Knowledge Platform</span>
+            <h1 class="text-4xl sm:text-6xl font-extrabold font-serif tracking-tight leading-tight">
+                Architectural Theory Meets Practical Innovation
+            </h1>
+            <p class="text-stone-300 text-lg sm:text-xl max-w-3xl mx-auto font-light">
+                Explore global urban policy frameworks, emerging structural research, masterclasses, and visionary studio showcases.
+            </p>
+        </div>
+        <div class="absolute inset-0 bg-[radial-gradient(#2c5e55_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none"></div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- News & Articles Section -->
+        <section id="news" class="space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-stone-200 dark:border-stone-800 pb-4">
+                <div>
+                    <h2 class="text-3xl font-bold font-serif">News & Insights</h2>
+                    <p class="text-stone-500 dark:text-stone-400 text-sm">Dispatches from sustainable urbanism and materials science.</p>
+                </div>
+                <!-- Region Filter -->
+                <div class="flex items-center space-x-2">
+                    <label class="text-sm font-medium text-stone-500">Region:</label>
+                    <select id="regionFilter" onchange="renderArticles()" class="bg-stone-100 dark:bg-stone-800 border border-stone-300 dark:border-stone-700 rounded-lg text-sm px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="All">All Regions</option>
+                        <option value="Global">Global</option>
+                        <option value="Europe">Europe</option>
+                        <option value="Asia Pacific">Asia Pacific</option>
+                        <option value="North America">North America</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Articles Cards Grid -->
+            <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+
+        <!-- Featured Creators / Architects -->
+        <section id="creators" class="space-y-6">
+            <div class="border-b border-stone-200 dark:border-stone-800 pb-4">
+                <h2 class="text-3xl font-bold font-serif">Featured Architects & Studios</h2>
+                <p class="text-stone-500 dark:text-stone-400 text-sm">Discover visionary practitioners and directly back their open design research.</p>
+            </div>
+
+            <div id="creatorsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+
+        <!-- Regional Architectural Policies -->
+        <section id="policies" class="space-y-6">
+            <div class="border-b border-stone-200 dark:border-stone-800 pb-4">
+                <h2 class="text-3xl font-bold font-serif">Policy & Building Regulations</h2>
+                <p class="text-stone-500 dark:text-stone-400 text-sm">Essential updates on zoning, embodied carbon standards, and historic preservation codes.</p>
+            </div>
+
+            <div id="policiesContainer" class="space-y-4">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+
+        <!-- Design Academy & Courses -->
+        <section id="academy" class="space-y-6">
+            <div class="border-b border-stone-200 dark:border-stone-800 pb-4">
+                <h2 class="text-3xl font-bold font-serif">Praxis Academy</h2>
+                <p class="text-stone-500 dark:text-stone-400 text-sm">Continuing education and computational design modules for practitioners.</p>
+            </div>
+
+            <div id="coursesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Saved / Favorite Drawer -->
+    <aside id="bookmarkDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-stone-900 shadow-2xl border-l border-stone-200 dark:border-stone-800 transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col">
+        <div class="p-4 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center bg-stone-50 dark:bg-stone-800">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-bookmark text-brand-500"></i>
+                <h3 class="font-bold text-lg font-serif">Saved Library</h3>
+            </div>
+            <button onclick="toggleBookmarkDrawer()" class="p-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        <div id="savedItemsContainer" class="p-4 overflow-y-auto flex-grow space-y-4">
+            <!-- Injected via JavaScript -->
+        </div>
+    </aside>
+
+    <!-- Tip Modal -->
+    <div id="tipModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-stone-800 max-w-sm w-full rounded-2xl p-6 shadow-xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold font-serif">Support Creator</h3>
+                <button onclick="closeTipModal()" class="text-stone-400 hover:text-stone-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p id="tipModalText" class="text-sm text-stone-600 dark:text-stone-300"></p>
+            <div class="grid grid-cols-3 gap-2">
+                <button onclick="sendTip(5)" class="py-2 border border-brand-500 rounded-lg hover:bg-brand-500 hover:text-white font-medium text-sm transition">$5</button>
+                <button onclick="sendTip(15)" class="py-2 border border-brand-500 rounded-lg hover:bg-brand-500 hover:text-white font-medium text-sm transition">$15</button>
+                <button onclick="sendTip(50)" class="py-2 border border-brand-500 rounded-lg hover:bg-brand-500 hover:text-white font-medium text-sm transition">$50</button>
+            </div>
+            <div id="tipSuccessMsg" class="hidden text-center text-xs text-green-600 font-semibold pt-2">
+                Thank you! Tip successfully processed.
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 text-sm py-8 border-t border-stone-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p>&copy; 2026 Architectural Praxis Platform. All rights reserved.</p>
+            <p class="text-xs text-stone-500">Empowering sustainable spatial practices worldwide.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Data Store
+        const articles = [
+            {
+                id: 'a1',
+                title: 'Mass Timber in High-Density Urban Ecosystems',
+                author: 'Elena Rostova',
+                category: 'Materials',
+                region: 'Europe',
+                date: 'Sep 12, 2026',
+                summary: 'Analyzing fire performance, structural integrity, and carbon sequestration potential of cross-laminated timber towers.',
+                img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80'
+            },
+            {
+                id: 'a2',
+                title: 'Passive Cooling Strategies in Arid Climates',
+                author: 'Kaelen Thorne',
+                category: 'Sustainability',
+                region: 'Global',
+                date: 'Sep 08, 2026',
+                summary: 'Adapting ancient wind towers and subterranean thermal loops for modern desert metropolis developments.',
+                img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80'
+            },
+            {
+                id: 'a3',
+                title: 'Adaptive Reuse in Post-Industrial Asia',
+                author: 'Mei-Ling Chen',
+                category: 'Urbanism',
+                region: 'Asia Pacific',
+                date: 'Aug 29, 2026',
+                summary: 'Transforming legacy textile mills into community innovation hubs with minimal structural disruption.',
+                img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80'
+            }
+        ];
+
+        const creators = [
+            {
+                id: 'c1',
+                name: 'Atelier Biomimicry',
+                role: 'Parametric Research',
+                location: 'Zurich, CH',
+                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
+            },
+            {
+                id: 'c2',
+                name: 'Soren Vance',
+                role: 'Acoustic Specialist',
+                location: 'Copenhagen, DK',
+                avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'
+            },
+            {
+                id: 'c3',
+                name: 'Habitat Zero Collective',
+                role: 'Affordable Housing Lab',
+                location: 'Toronto, CA',
+                avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80'
+            },
+            {
+                id: 'c4',
+                name: 'Kenzo Takeda',
+                role: 'Spatial Informatics',
+                location: 'Tokyo, JP',
+                avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80'
+            }
+        ];
+
+        const policies = [
+            {
+                id: 'p1',
+                region: 'EU Standards',
+                title: '2027 Embodied Carbon Ceiling Directives',
+                details: 'Mandatory life-cycle assessment (LCA) reporting for commercial developments exceeding 5,000 sq meters.'
+            },
+            {
+                id: 'p2',
+                region: 'North America',
+                title: 'Transit-Oriented Zoning Reform',
+                details: 'Abolishing minimum parking mandates within 800m of high-frequency transit lines across major metro areas.'
+            }
+        ];
+
+        const courses = [
+            {
+                id: 'k1',
+                title: 'Computational Facade Optimization with Rhino/Grasshopper',
+                level: 'Intermediate',
+                duration: '6 Weeks',
+                instructor: 'Prof. Marcus Vance'
+            },
+            {
+                id: 'k2',
+                title: 'Circular Building Systems & Deconstruction Design',
+                level: 'Advanced',
+                duration: '4 Weeks',
+                instructor: 'Dr. Sarah Jenkins'
+            }
+        ];
+
+        // Saved State
+        let savedItems = new Set(JSON.parse(localStorage.getItem('praxis_saved') || '[]'));
+        let activeTipCreator = null;
+
+        // Theme Toggle Logic
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+
+        // Bookmark Drawer Toggle
+        function toggleBookmarkDrawer() {
+            const drawer = document.getElementById('bookmarkDrawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        // Bookmark Handler
+        function toggleSave(id, title, type) {
+            const itemKey = `${type}:${id}:${title}`;
+            if (savedItems.has(itemKey)) {
+                savedItems.delete(itemKey);
+            } else {
+                savedItems.add(itemKey);
+            }
+            localStorage.setItem('praxis_saved', JSON.stringify(Array.from(savedItems)));
+            updateSavedUI();
+            renderArticles(); // Refresh article icons
+        }
+
+        function updateSavedUI() {
+            const badge = document.getElementById('savedCountBadge');
+            badge.innerText = savedItems.size;
+
+            const container = document.getElementById('savedItemsContainer');
+            if (savedItems.size === 0) {
+                container.innerHTML = '<p class="text-sm text-stone-400 italic text-center py-8">No saved items yet.</p>';
+                return;
+            }
+
+            container.innerHTML = Array.from(savedItems).map(item => {
+                const [type, id, title] = item.split(':');
+                return `
+                    <div class="p-3 bg-stone-100 dark:bg-stone-800 rounded-lg flex justify-between items-center text-sm">
+                        <div>
+                            <span class="text-xs uppercase font-bold text-brand-500">${type}</span>
+                            <p class="font-medium line-clamp-1">${title}</p>
+                        </div>
+                        <button onclick="toggleSave('${id}', '${title.replace(/'/g, "\\'")}', '${type}')" class="text-stone-400 hover:text-red-500 p-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render Articles
+        function renderArticles() {
+            const selectedRegion = document.getElementById('regionFilter').value;
+            const container = document.getElementById('articlesGrid');
+            
+            const filtered = articles.filter(a => selectedRegion === 'All' || a.region === selectedRegion);
+
+            container.innerHTML = filtered.map(a => {
+                const isSaved = savedItems.has(`Article:${a.id}:${a.title}`);
+                return `
+                    <article class="bg-white dark:bg-stone-800 rounded-2xl overflow-hidden border border-stone-200 dark:border-stone-700/60 shadow-sm hover:shadow-md transition flex flex-col">
+                        <img src="${a.img}" alt="${a.title}" class="h-48 w-full object-cover" onerror="this.src='https://placehold.co/600x400/2c5e55/ffffff?text=Praxis+Article'">
+                        <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex justify-between items-center text-xs font-semibold text-brand-500 mb-2">
+                                    <span>${a.category} &bull; ${a.region}</span>
+                                    <span class="text-stone-400">${a.date}</span>
+                                </div>
+                                <h3 class="font-bold text-lg font-serif mb-2">${a.title}</h3>
+                                <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed">${a.summary}</p>
+                            </div>
+                            <div class="flex justify-between items-center pt-2 border-t border-stone-100 dark:border-stone-700/50 text-xs">
+                                <span class="font-medium text-stone-500">By ${a.author}</span>
+                                <button onclick="toggleSave('${a.id}', '${a.title.replace(/'/g, "\\'")}', 'Article')" class="p-2 ${isSaved ? 'text-accent-terracotta' : 'text-stone-400 hover:text-stone-600'}">
+                                    <i class="fa-solid fa-bookmark text-base"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        // Render Creators
+        function renderCreators() {
+            const container = document.getElementById('creatorsGrid');
+            container.innerHTML = creators.map(c => `
+                <div class="bg-white dark:bg-stone-800 rounded-2xl p-5 border border-stone-200 dark:border-stone-700/60 text-center space-y-4 shadow-sm hover:shadow-md transition">
+                    <img src="${c.avatar}" class="w-20 h-20 rounded-full mx-auto object-cover border-2 border-brand-500" onerror="this.src='https://placehold.co/200x200/2c5e55/ffffff?text=Studio'">
+                    <div>
+                        <h4 class="font-bold text-base font-serif">${c.name}</h4>
+                        <p class="text-xs text-brand-500 font-medium">${c.role}</p>
+                        <p class="text-xs text-stone-400 mt-1"><i class="fa-solid fa-location-dot"></i> ${c.location}</p>
+                    </div>
+                    <button onclick="openTipModal('${c.name}')" class="w-full py-2 bg-stone-100 dark:bg-stone-700 hover:bg-brand-500 hover:text-white rounded-lg text-xs font-semibold transition">
+                        <i class="fa-solid fa-hand-holding-dollar mr-1"></i> Support Research
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Render Policies
+        function renderPolicies() {
+            const container = document.getElementById('policiesContainer');
+            container.innerHTML = policies.map(p => `
+                <div class="p-5 bg-white dark:bg-stone-800 rounded-xl border border-stone-200 dark:border-stone-700/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <span class="text-xs font-bold text-accent-terracotta uppercase tracking-wider">${p.region}</span>
+                        <h4 class="font-bold text-base font-serif">${p.title}</h4>
+                        <p class="text-sm text-stone-600 dark:text-stone-300">${p.details}</p>
+                    </div>
+                    <button onclick="toggleSave('${p.id}', '${p.title.replace(/'/g, "\\'")}', 'Policy')" class="shrink-0 px-4 py-2 border border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-700 rounded-lg text-xs font-medium transition">
+                        Track Regulation
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Render Courses
+        function renderCourses() {
+            const container = document.getElementById('coursesGrid');
+            container.innerHTML = courses.map(k => `
+                <div class="p-5 bg-white dark:bg-stone-800 rounded-2xl border border-stone-200 dark:border-stone-700/60 flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="px-2 py-0.5 bg-brand-100 dark:bg-brand-900 text-brand-600 dark:text-brand-100 font-semibold rounded">${k.level}</span>
+                            <span class="text-stone-400">${k.duration}</span>
+                        </div>
+                        <h4 class="font-bold text-lg font-serif leading-snug">${k.title}</h4>
+                        <p class="text-xs text-stone-500">Instructor: ${k.instructor}</p>
+                    </div>
+                    <button onclick="toggleSave('${k.id}', '${k.title.replace(/'/g, "\\'")}', 'Course')" class="w-full py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg text-xs font-medium transition">
+                        Enroll Syllabus
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Tipping Modal Handlers
+        function openTipModal(creatorName) {
+            activeTipCreator = creatorName;
+            document.getElementById('tipModalText').innerText = `Send a micro-grant directly to support ${creatorName}'s open research.`;
+            document.getElementById('tipSuccessMsg').classList.add('hidden');
+            document.getElementById('tipModal').classList.remove('hidden');
+            document.getElementById('tipModal').classList.add('flex');
+        }
+
+        function closeTipModal() {
+            document.getElementById('tipModal').classList.add('hidden');
+            document.getElementById('tipModal').classList.remove('flex');
+        }
+
+        function sendTip(amount) {
+            const msg = document.getElementById('tipSuccessMsg');
+            msg.innerText = `Successfully transferred $${amount} to ${activeTipCreator}!`;
+            msg.classList.remove('hidden');
+            setTimeout(() => {
+                closeTipModal();
+            }, 1500);
+        }
+
+        // App Initialization
+        window.onload = function() {
+            renderArticles();
+            renderCreators();
+            renderPolicies();
+            renderCourses();
+            updateSavedUI();
+        };
+    </script>
+</body>
+</html>
