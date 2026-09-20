@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRAXIS | Architectural Platform & Academy</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Payment SDKs -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&enable-funding=venmo,paylater"></script>
+</head>
+<body>
+
+  <!-- NAVIGATION BAR -->
+  <nav class="navbar">
+    <div class="nav-brand" onclick="switchSection('home')">PRAXIS</div>
+    <ul class="nav-links">
+      <li><a href="#" id="link-home" class="active" onclick="switchSection('home')">Home</a></li>
+      <li><a href="#" id="link-academy" onclick="switchSection('academy')">Academy (50)</a></li>
+      <li><a href="#" id="link-directory" onclick="switchSection('directory')">Creators (150+)</a></li>
+      <li><a href="#" id="link-policy" onclick="switchSection('policy')">Policy & News</a></li>
+    </ul>
+    <button class="donate-btn" onclick="openDonateModal()">Donate Platform</button>
+  </nav>
+
+  <main class="container">
+
+    <!-- 1. HOME LANDING PAGE (DEFAULT VIEW) -->
+    <section id="sec-home" class="page-section active">
+      <div class="hero">
+        <span class="hero-badge">Architectural Platform & Research Lab</span>
+        <h1>Bridging Spatial Design, Tectonics, & Applied Sciences</h1>
+        <p>A global registry of 150+ verified designers, 50 self-paced university courses, and real-time regional urban policy updates.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="switchSection('academy')">Explore 50 Courses</button>
+          <button class="btn btn-secondary" onclick="switchSection('directory')">Browse Creator Directory</button>
+        </div>
+      </div>
+
+      <!-- HIGHLIGHT STATS -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <h3>50</h3>
+          <p>Applied Courses ($0 - $50)</p>
+        </div>
+        <div class="stat-item">
+          <h3>150+</h3>
+          <p>Featured Creators & Studios</p>
+        </div>
+        <div class="stat-item">
+          <h3>6</h3>
+          <p>Academic Skill Tiers</p>
+        </div>
+        <div class="stat-item">
+          <h3>100%</h3>
+          <p>Self-Paced Practical Learning</p>
+        </div>
+      </div>
+
+      <!-- FEATURED SHOWCASE -->
+      <div class="section-title">
+        <h2>Platform Features</h2>
+        <p>Select a module to begin exploring</p>
+      </div>
+
+      <div class="grid">
+        <div class="card" onclick="switchSection('academy')">
+          <span class="card-badge">Academy Portal</span>
+          <h3>50 Applied Courses</h3>
+          <p>Complete self-directed curriculum spanning architectural drafting, structural statics, mass timber, and microclimate physics.</p>
+          <div class="card-action">Open Academy →</div>
+        </div>
+        <div class="card" onclick="switchSection('directory')">
+          <span class="card-badge">Directory</span>
+          <h3>150+ Showcase Profiles</h3>
+          <p>Discover architects, urbanists, and interior designers across global metros with portfolio showcases.</p>
+          <div class="card-action">View Directory →</div>
+        </div>
+        <div class="card" onclick="openDonateModal()">
+          <span class="card-badge">Support</span>
+          <h3>Platform Donation</h3>
+          <p>Support open-source spatial research, student grants, and independent course development.</p>
+          <div class="card-action">Make a Donation →</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. ACADEMY SECTION (50 COURSES) -->
+    <section id="sec-academy" class="page-section">
+      <div class="section-title">
+        <h2>50 Applied Courses Catalog</h2>
+        <p>From Free Entry-Level Foundations ($0) to Advanced Graduate Seminars ($50)</p>
+      </div>
+
+      <!-- FILTERS -->
+      <div class="controls-bar">
+        <input type="text" id="courseSearch" class="search-input" placeholder="Search by course code, title, or topic..." onkeyup="filterCourses()">
+        <select id="tierFilter" class="filter-select" onchange="filterCourses()">
+          <option value="ALL">All Tiers</option>
+          <option value="Entry-Level">Entry-Level ($0 - $8)</option>
+          <option value="Intermediate">Intermediate ($12 - $18)</option>
+          <option value="Difficult">Difficult ($20 - $28)</option>
+          <option value="Hard">Hard ($30 - $36)</option>
+          <option value="Undergrad Capstone">Undergrad Capstone ($38 - $42)</option>
+          <option value="Graduate-Level">Graduate-Level ($45 - $50)</option>
+        </select>
+        <select id="categoryFilter" class="filter-select" onchange="filterCourses()">
+          <option value="ALL">All Disciplines</option>
+          <option value="Architecture Core">Architecture Core (35)</option>
+          <option value="Applied Sciences & Math">Applied Sciences & Math (15)</option>
+        </select>
+      </div>
+
+      <div class="grid" id="coursesGrid"></div>
+    </section>
+
+    <!-- 3. DIRECTORY SECTION (150+ CREATORS) -->
+    <section id="sec-directory" class="page-section">
+      <div class="section-title">
+        <h2>Creator & Studio Directory</h2>
+        <p>A directory of 150+ global architects, interior specialists, and urban planners</p>
+      </div>
+
+      <div class="controls-bar">
+        <input type="text" id="creatorSearch" class="search-input" placeholder="Search by creator name, specialty, or city..." onkeyup="filterCreators()">
+      </div>
+
+      <div class="grid" id="creatorsGrid"></div>
+    </section>
+
+    <!-- 4. POLICY SECTION -->
+    <section id="sec-policy" class="page-section">
+      <div class="section-title">
+        <h2>Regional Policy & Zoning News</h2>
+        <p>Quarterly building regulations, environmental mandates, and structural codes</p>
+      </div>
+      <div class="policy-block">
+        <h3>2026 High-Rise Mass Timber Fire & Structural Codes</h3>
+        <p>Updated structural testing standards for cross-laminated timber (CLT) assemblies exceeding 12 stories in North America and Western Europe.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- COURSE DETAIL & CHECKOUT MODAL -->
+  <div class="modal-overlay" id="courseModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('courseModal')">&times;</button>
+      <span class="card-badge" id="mCode">ARC 101</span>
+      <h2 id="mTitle">Course Title</h2>
+      <p id="mTier" style="color: var(--accent-slate); font-weight: 500; margin-bottom: 1rem;"></p>
+      
+      <!-- VIDEO EMBED PLACEHOLDER -->
+      <div class="video-container">
+        <iframe id="mVideo" src="" frameborder="0" allowfullscreen></iframe>
+      </div>
+
+      <h4>Course Outline</h4>
+      <p id="mOutline" class="modal-desc"></p>
+
+      <h4>Applied Project Deliverable</h4>
+      <p id="mDeliverable" class="modal-desc" style="color: var(--text-main); font-weight: 500;"></p>
+
+      <div class="payment-box">
+        <div class="price-tag" id="mPrice">$0</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Instant lifetime access to video lectures, working files, and project guides.</p>
+        
+        <!-- PAYMENT GATEWAY OPTIONS -->
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 0.5rem;" onclick="processStripeCheckout()">Pay with Debit / Credit Card / Cash App</button>
+        <div id="paypal-button-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DONATION MODAL -->
+  <div class="modal-overlay" id="donateModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('donateModal')">&times;</button>
+      <h2>Donate to PRAXIS</h2>
+      <p class="modal-desc">Support independent spatial research, course expansion, and platform development.</p>
+
+      <div class="donation-presets">
+        <button class="preset-btn active" onclick="setDonation(5, this)">$5</button>
+        <button class="preset-btn" onclick="setDonation(15, this)">$15</button>
+        <button class="preset-btn" onclick="setDonation(25, this)">$25</button>
+        <button class="preset-btn" onclick="setDonation(50, this)">$50</button>
+      </div>
+
+      <input type="number" id="customDonateAmount" class="search-input" value="5" style="width: 100%; margin-bottom: 1.5rem;" placeholder="Or enter custom amount ($)">
+
+      <button class="btn btn-primary" style="width: 100%; margin-bottom: 0.5rem;" onclick="processDonation('card')">Donate with Card / Cash App</button>
+      <div id="paypal-donate-container"></div>
+    </div>
+  </div>
+
+  <!-- Main Application Logic Script -->
+  <script src="app.js"></script>
+</body>
+</html>
