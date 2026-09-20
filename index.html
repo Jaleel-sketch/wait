@@ -1,479 +1,429 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Architectural Praxis | Design, Policy & Education</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f4f7f6',
-                            100: '#e3eae7',
-                            500: '#2c5e55',
-                            600: '#234b44',
-                            700: '#1b3a35',
-                            900: '#0f221f',
-                        },
-                        accent: {
-                            gold: '#d4af37',
-                            terracotta: '#e07a5f'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif']
-                    }
-                }
-            }
-        }
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* Custom smooth scrolling and scrollbar styles */
-        html { scroll-behavior: smooth; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #8883; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #8886; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Praxis | Professional Architecture & Design Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-main: #0B132B;
+      --bg-card: #1C2541;
+      --bg-elevated: #2A365C;
+      --accent-brass: #D4AF37;
+      --accent-teal: #48A9A6;
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border-color: #2E3A59;
+      --font-serif: 'Cinzel', serif;
+      --font-sans: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      padding-top: 80px;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background-color: rgba(11, 19, 43, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 5%;
+      z-index: 1000;
+    }
+
+    .brand {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--accent-brass);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--accent-teal);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .section-header {
+      margin-bottom: 2.5rem;
+      border-left: 4px solid var(--accent-brass);
+      padding-left: 1rem;
+    }
+
+    .section-header h2 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      color: var(--text-main);
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    /* Search & Filter Controls */
+    .controls-bar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input, .filter-select {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.75rem 1.25rem;
+      border-radius: 6px;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .search-input { flex: 1; min-width: 250px; }
+    .search-input:focus, .filter-select:focus { border-color: var(--accent-teal); }
+
+    /* Cards Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-brass);
+    }
+
+    .card-badge {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-teal);
+      background: rgba(72, 169, 166, 0.1);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      width: fit-content;
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1rem;
+      margin-top: auto;
+    }
+
+    .price {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent-brass);
+    }
+
+    .btn {
+      background-color: var(--accent-brass);
+      color: #000;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover { opacity: 0.9; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-brass);
+      border-radius: 8px;
+      width: 90%;
+      max-width: 550px;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: none; border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .modal h3 {
+      font-family: var(--font-serif);
+      color: var(--accent-brass);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Section visibility */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+  </style>
 </head>
-<body class="bg-stone-50 dark:bg-stone-900 text-stone-800 dark:text-stone-100 font-sans transition-colors duration-300 min-h-full flex flex-col">
+<body>
 
-    <!-- Navigation Bar -->
-    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-stone-50/80 dark:bg-stone-900/80 border-b border-stone-200 dark:border-stone-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <i class="fa-solid fa-compass-drafting text-2xl text-brand-500 dark:text-brand-100"></i>
-                <span class="text-xl font-bold tracking-tight font-serif">ARCHITECTURAL PRAXIS</span>
-            </div>
-            
-            <nav class="hidden md:flex space-x-8 text-sm font-medium">
-                <a href="#news" class="hover:text-brand-500 transition-colors">Articles</a>
-                <a href="#creators" class="hover:text-brand-500 transition-colors">Creators</a>
-                <a href="#policies" class="hover:text-brand-500 transition-colors">Policies</a>
-                <a href="#academy" class="hover:text-brand-500 transition-colors">Academy</a>
-            </nav>
+  <nav class="navbar">
+    <a href="#" class="brand">PRAXIS</a>
+    <ul class="nav-links">
+      <li><a href="#academy" class="nav-item active" onclick="switchTab('academy')">Academy (20)</a></li>
+      <li><a href="#directory" class="nav-item" onclick="switchTab('directory')">Directory (200+)</a></li>
+      <li><a href="#news" class="nav-item" onclick="switchTab('news')">News & Policy</a></li>
+    </ul>
+  </nav>
 
-            <div class="flex items-center space-x-4">
-                <!-- Dark Mode Toggle -->
-                <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2 rounded-lg bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 dark:hover:bg-stone-700 transition-colors" title="Toggle theme">
-                    <i id="themeIcon" class="fa-solid fa-moon"></i>
-                </button>
-                
-                <!-- Bookmark Drawer Trigger -->
-                <button onclick="toggleBookmarkDrawer()" class="relative p-2 rounded-lg bg-brand-500 text-white hover:bg-brand-600 transition-colors flex items-center gap-2 text-sm font-medium">
-                    <i class="fa-solid fa-bookmark"></i>
-                    <span class="hidden sm:inline">Saved</span>
-                    <span id="savedCountBadge" class="bg-accent-terracotta text-white text-xs px-1.5 py-0.5 rounded-full font-bold">0</span>
-                </button>
-            </div>
-        </div>
-    </header>
+  <main class="container">
 
-    <!-- Hero Banner -->
-    <section class="relative bg-brand-900 text-stone-100 py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div class="max-w-5xl mx-auto text-center space-y-6 relative z-10">
-            <span class="inline-block px-3 py-1 bg-brand-700 text-accent-gold rounded-full text-xs font-semibold tracking-wider uppercase">Open Knowledge Platform</span>
-            <h1 class="text-4xl sm:text-6xl font-extrabold font-serif tracking-tight leading-tight">
-                Architectural Theory Meets Practical Innovation
-            </h1>
-            <p class="text-stone-300 text-lg sm:text-xl max-w-3xl mx-auto font-light">
-                Explore global urban policy frameworks, emerging structural research, masterclasses, and visionary studio showcases.
-            </p>
-        </div>
-        <div class="absolute inset-0 bg-[radial-gradient(#2c5e55_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none"></div>
+    <!-- ACADEMY SECTION (20 COURSES) -->
+    <section id="academy" class="page-section active">
+      <div class="section-header">
+        <h2>Academic Course Catalog</h2>
+        <p>20 University-Grade Architectural & Design Courses</p>
+      </div>
+
+      <div class="controls-bar">
+        <input type="text" id="courseSearch" class="search-input" placeholder="Search course title, code, or topic..." onkeyup="filterCourses()">
+      </div>
+
+      <div class="grid" id="coursesContainer"></div>
     </section>
 
-    <!-- Main Content Grid -->
-    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+    <!-- DIRECTORY SECTION (150-300 CREATORS) -->
+    <section id="directory" class="page-section">
+      <div class="section-header">
+        <h2>Creator & Studio Directory</h2>
+        <p>150+ Verified Architects, Designers, and Urbanists</p>
+      </div>
 
-        <!-- News & Articles Section -->
-        <section id="news" class="space-y-6">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-stone-200 dark:border-stone-800 pb-4">
-                <div>
-                    <h2 class="text-3xl font-bold font-serif">News & Insights</h2>
-                    <p class="text-stone-500 dark:text-stone-400 text-sm">Dispatches from sustainable urbanism and materials science.</p>
-                </div>
-                <!-- Region Filter -->
-                <div class="flex items-center space-x-2">
-                    <label class="text-sm font-medium text-stone-500">Region:</label>
-                    <select id="regionFilter" onchange="renderArticles()" class="bg-stone-100 dark:bg-stone-800 border border-stone-300 dark:border-stone-700 rounded-lg text-sm px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
-                        <option value="All">All Regions</option>
-                        <option value="Global">Global</option>
-                        <option value="Europe">Europe</option>
-                        <option value="Asia Pacific">Asia Pacific</option>
-                        <option value="North America">North America</option>
-                    </select>
-                </div>
-            </div>
+      <div class="controls-bar">
+        <input type="text" id="creatorSearch" class="search-input" placeholder="Search creators by name, discipline, or region..." onkeyup="filterCreators()">
+      </div>
 
-            <!-- Articles Cards Grid -->
-            <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Injected via JavaScript -->
-            </div>
-        </section>
+      <div class="grid" id="creatorsContainer"></div>
+    </section>
 
-        <!-- Featured Creators / Architects -->
-        <section id="creators" class="space-y-6">
-            <div class="border-b border-stone-200 dark:border-stone-800 pb-4">
-                <h2 class="text-3xl font-bold font-serif">Featured Architects & Studios</h2>
-                <p class="text-stone-500 dark:text-stone-400 text-sm">Discover visionary practitioners and directly back their open design research.</p>
-            </div>
+    <!-- NEWS SECTION -->
+    <section id="news" class="page-section">
+      <div class="section-header">
+        <h2>Regional Policy & Industry News</h2>
+        <p>Zoning updates, building codes, and architectural publications</p>
+      </div>
+      <div style="background: var(--bg-card); padding: 2rem; border-radius: 8px; border: 1px solid var(--border-color);">
+        <h3 style="color: var(--accent-teal); margin-bottom: 0.5rem;">Regional Zoning Brief: Q3 2026</h3>
+        <p style="color: var(--text-muted);">Updated environmental requirements for timber hybrid high-rises across North American metropolitan areas.</p>
+      </div>
+    </section>
 
-            <div id="creatorsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Injected via JavaScript -->
-            </div>
-        </section>
+  </main>
 
-        <!-- Regional Architectural Policies -->
-        <section id="policies" class="space-y-6">
-            <div class="border-b border-stone-200 dark:border-stone-800 pb-4">
-                <h2 class="text-3xl font-bold font-serif">Policy & Building Regulations</h2>
-                <p class="text-stone-500 dark:text-stone-400 text-sm">Essential updates on zoning, embodied carbon standards, and historic preservation codes.</p>
-            </div>
-
-            <div id="policiesContainer" class="space-y-4">
-                <!-- Injected via JavaScript -->
-            </div>
-        </section>
-
-        <!-- Design Academy & Courses -->
-        <section id="academy" class="space-y-6">
-            <div class="border-b border-stone-200 dark:border-stone-800 pb-4">
-                <h2 class="text-3xl font-bold font-serif">Praxis Academy</h2>
-                <p class="text-stone-500 dark:text-stone-400 text-sm">Continuing education and computational design modules for practitioners.</p>
-            </div>
-
-            <div id="coursesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Injected via JavaScript -->
-            </div>
-        </section>
-    </main>
-
-    <!-- Saved / Favorite Drawer -->
-    <aside id="bookmarkDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-stone-900 shadow-2xl border-l border-stone-200 dark:border-stone-800 transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col">
-        <div class="p-4 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center bg-stone-50 dark:bg-stone-800">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-bookmark text-brand-500"></i>
-                <h3 class="font-bold text-lg font-serif">Saved Library</h3>
-            </div>
-            <button onclick="toggleBookmarkDrawer()" class="p-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
+  <!-- PAYMENT MODAL -->
+  <div class="modal-overlay" id="paymentModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h3 id="modalCourseCode">ARC 101</h3>
+      <h2 id="modalCourseTitle" style="margin-bottom: 1rem; font-size: 1.4rem;">Course Title</h2>
+      <p id="modalCourseDesc" style="color: var(--text-muted); margin-bottom: 1.5rem;"></p>
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+        <div>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Tuition</span>
+          <div id="modalCoursePrice" class="price">$0</div>
         </div>
-        <div id="savedItemsContainer" class="p-4 overflow-y-auto flex-grow space-y-4">
-            <!-- Injected via JavaScript -->
-        </div>
-    </aside>
-
-    <!-- Tip Modal -->
-    <div id="tipModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-white dark:bg-stone-800 max-w-sm w-full rounded-2xl p-6 shadow-xl space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold font-serif">Support Creator</h3>
-                <button onclick="closeTipModal()" class="text-stone-400 hover:text-stone-600"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <p id="tipModalText" class="text-sm text-stone-600 dark:text-stone-300"></p>
-            <div class="grid grid-cols-3 gap-2">
-                <button onclick="sendTip(5)" class="py-2 border border-brand-500 rounded-lg hover:bg-brand-500 hover:text-white font-medium text-sm transition">$5</button>
-                <button onclick="sendTip(15)" class="py-2 border border-brand-500 rounded-lg hover:bg-brand-500 hover:text-white font-medium text-sm transition">$15</button>
-                <button onclick="sendTip(50)" class="py-2 border border-brand-500 rounded-lg hover:bg-brand-500 hover:text-white font-medium text-sm transition">$50</button>
-            </div>
-            <div id="tipSuccessMsg" class="hidden text-center text-xs text-green-600 font-semibold pt-2">
-                Thank you! Tip successfully processed.
-            </div>
-        </div>
+        <button class="btn" onclick="alert('Redirecting to secure payment checkout...')">Proceed to Checkout</button>
+      </div>
     </div>
+  </div>
 
-    <!-- Footer -->
-    <footer class="bg-stone-900 text-stone-400 text-sm py-8 border-t border-stone-800 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
-            <p>&copy; 2026 Architectural Praxis Platform. All rights reserved.</p>
-            <p class="text-xs text-stone-500">Empowering sustainable spatial practices worldwide.</p>
+  <script>
+    // 20 UNIVERSITY COURSES DATA
+    const courses = [
+      { code: "ARC 101", title: "Introduction to Architectural Representation", level: "Level 100 - Undergrad", price: "$450", desc: "Foundations of orthographic projection, perspective rendering, and manual drafting techniques." },
+      { code: "ARC 202", title: "Structural Mechanics & Timber Systems", level: "Level 200 - Undergrad", price: "$520", desc: "Engineering principles of mass timber, load-bearing wood frames, and structural integrity." },
+      { code: "ARC 305", title: "Environmental Control & HVAC Integration", level: "Level 300 - Undergrad", price: "$600", desc: "Passive solar heating, natural ventilation, and mechanical environmental systems." },
+      { code: "ARC 410", title: "Building Information Modeling (BIM & Revit)", level: "Level 400 - Advanced", price: "$650", desc: "Advanced digital workflows, parametric family creation, and collaborative Revit design." },
+      { code: "ARC 501", title: "Parametric Design & Computational Geometry", level: "Level 500 - Graduate", price: "$750", desc: "Grasshopper and Python scripting for algorithmic geometry generation in architecture." },
+      { code: "ARC 520", title: "Urban Theory & Regional Zoning Policy", level: "Level 500 - Graduate", price: "$580", desc: "Analysis of urban spatial growth, municipal zoning codes, and land-use regulations." },
+      { code: "ARC 603", title: "High-Performance Building Envelopes", level: "Level 600 - Graduate Seminar", price: "$800", desc: "Curtain wall engineering, thermal bridging mitigation, and advanced facade design." },
+      { code: "ARC 615", title: "Architectural History: Modernism to Digitalism", level: "Level 600 - Seminar", price: "$490", desc: "Critical examination of 20th and 21st-century spatial design movements." },
+      { code: "INT 210", title: "Interior Spatial Ergonomics & Lighting", level: "Level 200 - Undergrad", price: "$480", desc: "Human scale factors, luminaire selection, and architectural daylighting strategies." },
+      { code: "INT 340", title: "Material Science & Sustainable Textiles", level: "Level 300 - Undergrad", price: "$530", desc: "Life-cycle analysis of interior finishes, non-toxic materials, and acoustic textiles." },
+      { code: "INT 450", title: "Acoustic Design for Performance Spaces", level: "Level 400 - Advanced", price: "$620", desc: "Sound propagation, reverberation management, and soundproofing design." },
+      { code: "URB 301", title: "Regional Planning & Land Development", level: "Level 300 - Undergrad", price: "$550", desc: "Macro-level infrastructure planning, transit access, and environmental impact studies." },
+      { code: "URB 420", title: "Transit-Oriented Development Strategies", level: "Level 400 - Advanced", price: "$610", desc: "Designing high-density urban corridors integrated with public transportation." },
+      { code: "BMS 220", title: "Concrete & Steel Engineering Systems", level: "Level 200 - Undergrad", price: "$540", desc: "Reinforced concrete behavior, structural steel connections, and seismic resistance." },
+      { code: "BMS 410", title: "Passive House Principles & Net-Zero", level: "Level 400 - Advanced", price: "$680", desc: "PHI certification standards, airtightness testing, and net-zero energy design." },
+      { code: "PRA 500", title: "Architectural Practice & Contract Law", level: "Level 500 - Graduate", price: "$720", desc: "AIA contracts, liability management, business operations, and project delivery." },
+      { code: "PRA 550", title: "Construction Documents & Site Supervision", level: "Level 500 - Graduate", price: "$700", desc: "Translating design intent into technical working drawings and managing job sites." },
+      { code: "PRA 620", title: "Historic Preservation & Adaptive Reuse", level: "Level 600 - Graduate Seminar", price: "$640", desc: "Retrofitting historic structures while preserving heritage architectural integrity." },
+      { code: "DES 330", title: "Spatial Photography & Digital Rendering", level: "Level 300 - Undergrad", price: "$470", desc: "Photoreal rendering using V-Ray, Unreal Engine, and architectural photography." },
+      { code: "DES 600", title: "Master’s Thesis Studio & Portfolio Review", level: "Level 600 - Master Studio", price: "$950", desc: "Capstone research project under university faculty oversight." }
+    ];
+
+    // GENERATE 200 CREATORS
+    const disciplines = ["Architect", "Interior Architect", "Parametric Designer", "Urban Planner", "Landscape Architect"];
+    const regions = ["Tokyo, Japan", "Berlin, Germany", "New York, USA", "London, UK", "Copenhagen, Denmark", "Milan, Italy"];
+    const creators = [];
+
+    for (let i = 1; i <= 200; i++) {
+      creators.push({
+        id: i,
+        name: `Studio Member #${i}`,
+        discipline: disciplines[i % disciplines.length],
+        location: regions[i % regions.length],
+        bio: `Specializing in high-performance spatial interventions and sustainable materials.`
+      });
+    }
+
+    // RENDER FUNCTIONS
+    function renderCourses(data) {
+      const container = document.getElementById('coursesContainer');
+      container.innerHTML = data.map(c => `
+        <div class="card">
+          <div>
+            <span class="card-badge">${c.code} • ${c.level}</span>
+            <h3>${c.title}</h3>
+            <p>${c.desc}</p>
+          </div>
+          <div class="card-footer">
+            <span class="price">${c.price}</span>
+            <button class="btn" onclick="openModal('${c.code}', '${c.title}', '${c.desc}', '${c.price}')">Enroll Now</button>
+          </div>
         </div>
-    </footer>
+      `).join('');
+    }
 
-    <script>
-        // Data Store
-        const articles = [
-            {
-                id: 'a1',
-                title: 'Mass Timber in High-Density Urban Ecosystems',
-                author: 'Elena Rostova',
-                category: 'Materials',
-                region: 'Europe',
-                date: 'Sep 12, 2026',
-                summary: 'Analyzing fire performance, structural integrity, and carbon sequestration potential of cross-laminated timber towers.',
-                img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80'
-            },
-            {
-                id: 'a2',
-                title: 'Passive Cooling Strategies in Arid Climates',
-                author: 'Kaelen Thorne',
-                category: 'Sustainability',
-                region: 'Global',
-                date: 'Sep 08, 2026',
-                summary: 'Adapting ancient wind towers and subterranean thermal loops for modern desert metropolis developments.',
-                img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80'
-            },
-            {
-                id: 'a3',
-                title: 'Adaptive Reuse in Post-Industrial Asia',
-                author: 'Mei-Ling Chen',
-                category: 'Urbanism',
-                region: 'Asia Pacific',
-                date: 'Aug 29, 2026',
-                summary: 'Transforming legacy textile mills into community innovation hubs with minimal structural disruption.',
-                img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80'
-            }
-        ];
+    function renderCreators(data) {
+      const container = document.getElementById('creatorsContainer');
+      container.innerHTML = data.slice(0, 30).map(cr => `
+        <div class="card">
+          <div>
+            <span class="card-badge">${cr.discipline}</span>
+            <h3>${cr.name}</h3>
+            <p style="color: var(--accent-brass); font-size: 0.85rem;">${cr.location}</p>
+            <p>${cr.bio}</p>
+          </div>
+          <div class="card-footer">
+            <button class="btn" style="background: var(--bg-elevated); color: var(--text-main);" onclick="alert('Viewing Profile...')">View Portfolio</button>
+          </div>
+        </div>
+      `).join('');
+    }
 
-        const creators = [
-            {
-                id: 'c1',
-                name: 'Atelier Biomimicry',
-                role: 'Parametric Research',
-                location: 'Zurich, CH',
-                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
-            },
-            {
-                id: 'c2',
-                name: 'Soren Vance',
-                role: 'Acoustic Specialist',
-                location: 'Copenhagen, DK',
-                avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'
-            },
-            {
-                id: 'c3',
-                name: 'Habitat Zero Collective',
-                role: 'Affordable Housing Lab',
-                location: 'Toronto, CA',
-                avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80'
-            },
-            {
-                id: 'c4',
-                name: 'Kenzo Takeda',
-                role: 'Spatial Informatics',
-                location: 'Tokyo, JP',
-                avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80'
-            }
-        ];
+    // SEARCH & NAVIGATION LOGIC
+    function filterCourses() {
+      const q = document.getElementById('courseSearch').value.toLowerCase();
+      const filtered = courses.filter(c => c.title.toLowerCase().includes(q) || c.code.toLowerCase().includes(q));
+      renderCourses(filtered);
+    }
 
-        const policies = [
-            {
-                id: 'p1',
-                region: 'EU Standards',
-                title: '2027 Embodied Carbon Ceiling Directives',
-                details: 'Mandatory life-cycle assessment (LCA) reporting for commercial developments exceeding 5,000 sq meters.'
-            },
-            {
-                id: 'p2',
-                region: 'North America',
-                title: 'Transit-Oriented Zoning Reform',
-                details: 'Abolishing minimum parking mandates within 800m of high-frequency transit lines across major metro areas.'
-            }
-        ];
+    function filterCreators() {
+      const q = document.getElementById('creatorSearch').value.toLowerCase();
+      const filtered = creators.filter(c => c.name.toLowerCase().includes(q) || c.discipline.toLowerCase().includes(q) || c.location.toLowerCase().includes(q));
+      renderCreators(filtered);
+    }
 
-        const courses = [
-            {
-                id: 'k1',
-                title: 'Computational Facade Optimization with Rhino/Grasshopper',
-                level: 'Intermediate',
-                duration: '6 Weeks',
-                instructor: 'Prof. Marcus Vance'
-            },
-            {
-                id: 'k2',
-                title: 'Circular Building Systems & Deconstruction Design',
-                level: 'Advanced',
-                duration: '4 Weeks',
-                instructor: 'Dr. Sarah Jenkins'
-            }
-        ];
+    function switchTab(tabId) {
+      document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
 
-        // Saved State
-        let savedItems = new Set(JSON.parse(localStorage.getItem('praxis_saved') || '[]'));
-        let activeTipCreator = null;
+    function openModal(code, title, desc, price) {
+      document.getElementById('modalCourseCode').innerText = code;
+      document.getElementById('modalCourseTitle').innerText = title;
+      document.getElementById('modalCourseDesc').innerText = desc;
+      document.getElementById('modalCoursePrice').innerText = price;
+      document.getElementById('paymentModal').style.display = 'flex';
+    }
 
-        // Theme Toggle Logic
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-        }
+    function closeModal() {
+      document.getElementById('paymentModal').style.display = 'none';
+    }
 
-        // Bookmark Drawer Toggle
-        function toggleBookmarkDrawer() {
-            const drawer = document.getElementById('bookmarkDrawer');
-            drawer.classList.toggle('translate-x-full');
-        }
-
-        // Bookmark Handler
-        function toggleSave(id, title, type) {
-            const itemKey = `${type}:${id}:${title}`;
-            if (savedItems.has(itemKey)) {
-                savedItems.delete(itemKey);
-            } else {
-                savedItems.add(itemKey);
-            }
-            localStorage.setItem('praxis_saved', JSON.stringify(Array.from(savedItems)));
-            updateSavedUI();
-            renderArticles(); // Refresh article icons
-        }
-
-        function updateSavedUI() {
-            const badge = document.getElementById('savedCountBadge');
-            badge.innerText = savedItems.size;
-
-            const container = document.getElementById('savedItemsContainer');
-            if (savedItems.size === 0) {
-                container.innerHTML = '<p class="text-sm text-stone-400 italic text-center py-8">No saved items yet.</p>';
-                return;
-            }
-
-            container.innerHTML = Array.from(savedItems).map(item => {
-                const [type, id, title] = item.split(':');
-                return `
-                    <div class="p-3 bg-stone-100 dark:bg-stone-800 rounded-lg flex justify-between items-center text-sm">
-                        <div>
-                            <span class="text-xs uppercase font-bold text-brand-500">${type}</span>
-                            <p class="font-medium line-clamp-1">${title}</p>
-                        </div>
-                        <button onclick="toggleSave('${id}', '${title.replace(/'/g, "\\'")}', '${type}')" class="text-stone-400 hover:text-red-500 p-1">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Render Articles
-        function renderArticles() {
-            const selectedRegion = document.getElementById('regionFilter').value;
-            const container = document.getElementById('articlesGrid');
-            
-            const filtered = articles.filter(a => selectedRegion === 'All' || a.region === selectedRegion);
-
-            container.innerHTML = filtered.map(a => {
-                const isSaved = savedItems.has(`Article:${a.id}:${a.title}`);
-                return `
-                    <article class="bg-white dark:bg-stone-800 rounded-2xl overflow-hidden border border-stone-200 dark:border-stone-700/60 shadow-sm hover:shadow-md transition flex flex-col">
-                        <img src="${a.img}" alt="${a.title}" class="h-48 w-full object-cover" onerror="this.src='https://placehold.co/600x400/2c5e55/ffffff?text=Praxis+Article'">
-                        <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
-                            <div>
-                                <div class="flex justify-between items-center text-xs font-semibold text-brand-500 mb-2">
-                                    <span>${a.category} &bull; ${a.region}</span>
-                                    <span class="text-stone-400">${a.date}</span>
-                                </div>
-                                <h3 class="font-bold text-lg font-serif mb-2">${a.title}</h3>
-                                <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed">${a.summary}</p>
-                            </div>
-                            <div class="flex justify-between items-center pt-2 border-t border-stone-100 dark:border-stone-700/50 text-xs">
-                                <span class="font-medium text-stone-500">By ${a.author}</span>
-                                <button onclick="toggleSave('${a.id}', '${a.title.replace(/'/g, "\\'")}', 'Article')" class="p-2 ${isSaved ? 'text-accent-terracotta' : 'text-stone-400 hover:text-stone-600'}">
-                                    <i class="fa-solid fa-bookmark text-base"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                `;
-            }).join('');
-        }
-
-        // Render Creators
-        function renderCreators() {
-            const container = document.getElementById('creatorsGrid');
-            container.innerHTML = creators.map(c => `
-                <div class="bg-white dark:bg-stone-800 rounded-2xl p-5 border border-stone-200 dark:border-stone-700/60 text-center space-y-4 shadow-sm hover:shadow-md transition">
-                    <img src="${c.avatar}" class="w-20 h-20 rounded-full mx-auto object-cover border-2 border-brand-500" onerror="this.src='https://placehold.co/200x200/2c5e55/ffffff?text=Studio'">
-                    <div>
-                        <h4 class="font-bold text-base font-serif">${c.name}</h4>
-                        <p class="text-xs text-brand-500 font-medium">${c.role}</p>
-                        <p class="text-xs text-stone-400 mt-1"><i class="fa-solid fa-location-dot"></i> ${c.location}</p>
-                    </div>
-                    <button onclick="openTipModal('${c.name}')" class="w-full py-2 bg-stone-100 dark:bg-stone-700 hover:bg-brand-500 hover:text-white rounded-lg text-xs font-semibold transition">
-                        <i class="fa-solid fa-hand-holding-dollar mr-1"></i> Support Research
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        // Render Policies
-        function renderPolicies() {
-            const container = document.getElementById('policiesContainer');
-            container.innerHTML = policies.map(p => `
-                <div class="p-5 bg-white dark:bg-stone-800 rounded-xl border border-stone-200 dark:border-stone-700/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div class="space-y-1">
-                        <span class="text-xs font-bold text-accent-terracotta uppercase tracking-wider">${p.region}</span>
-                        <h4 class="font-bold text-base font-serif">${p.title}</h4>
-                        <p class="text-sm text-stone-600 dark:text-stone-300">${p.details}</p>
-                    </div>
-                    <button onclick="toggleSave('${p.id}', '${p.title.replace(/'/g, "\\'")}', 'Policy')" class="shrink-0 px-4 py-2 border border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-700 rounded-lg text-xs font-medium transition">
-                        Track Regulation
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        // Render Courses
-        function renderCourses() {
-            const container = document.getElementById('coursesGrid');
-            container.innerHTML = courses.map(k => `
-                <div class="p-5 bg-white dark:bg-stone-800 rounded-2xl border border-stone-200 dark:border-stone-700/60 flex flex-col justify-between space-y-4">
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="px-2 py-0.5 bg-brand-100 dark:bg-brand-900 text-brand-600 dark:text-brand-100 font-semibold rounded">${k.level}</span>
-                            <span class="text-stone-400">${k.duration}</span>
-                        </div>
-                        <h4 class="font-bold text-lg font-serif leading-snug">${k.title}</h4>
-                        <p class="text-xs text-stone-500">Instructor: ${k.instructor}</p>
-                    </div>
-                    <button onclick="toggleSave('${k.id}', '${k.title.replace(/'/g, "\\'")}', 'Course')" class="w-full py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg text-xs font-medium transition">
-                        Enroll Syllabus
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        // Tipping Modal Handlers
-        function openTipModal(creatorName) {
-            activeTipCreator = creatorName;
-            document.getElementById('tipModalText').innerText = `Send a micro-grant directly to support ${creatorName}'s open research.`;
-            document.getElementById('tipSuccessMsg').classList.add('hidden');
-            document.getElementById('tipModal').classList.remove('hidden');
-            document.getElementById('tipModal').classList.add('flex');
-        }
-
-        function closeTipModal() {
-            document.getElementById('tipModal').classList.add('hidden');
-            document.getElementById('tipModal').classList.remove('flex');
-        }
-
-        function sendTip(amount) {
-            const msg = document.getElementById('tipSuccessMsg');
-            msg.innerText = `Successfully transferred $${amount} to ${activeTipCreator}!`;
-            msg.classList.remove('hidden');
-            setTimeout(() => {
-                closeTipModal();
-            }, 1500);
-        }
-
-        // App Initialization
-        window.onload = function() {
-            renderArticles();
-            renderCreators();
-            renderPolicies();
-            renderCourses();
-            updateSavedUI();
-        };
-    </script>
+    // INITIAL LOAD
+    renderCourses(courses);
+    renderCreators(creators);
+  </script>
 </body>
 </html>
